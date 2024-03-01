@@ -1,5 +1,8 @@
 import express from "express";
-import { protectedRoutesWithParser } from "../middleware/authMiddleware.js";
+import {
+  adminMiddleware,
+  protectedRoutesWithParser,
+} from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 import {
@@ -17,5 +20,13 @@ router
   .route("/profile")
   .get(protectedRoutesWithParser, getUserProfile)
   .put(protectedRoutesWithParser, updateUserProfile);
+
+//admin
+router.get(
+  "/getAllUsers",
+  protectedRoutesWithParser,
+  adminMiddleware,
+  logoutUser
+);
 
 export default router;

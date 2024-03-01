@@ -111,4 +111,27 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   res.send("Hello");
 });
 
-export { userLogin, userSignUp, logoutUser, getUserProfile, updateUserProfile };
+// @desc update user profile
+// route PUT /api/users/getAllUsers
+// @ccess PRIVATE ( only or admin )
+const getAllUsersList = asyncHandler(async (req, res) => {
+  try {
+    // Fetch all users excluding passwords
+    const users = await UserModal.find({}).select("-password");
+    res.status(200).json({
+      message: "All users fetched successfully.",
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error while fetching users" });
+  }
+});
+
+export {
+  userLogin,
+  userSignUp,
+  logoutUser,
+  getUserProfile,
+  updateUserProfile,
+  getAllUsersList,
+};
