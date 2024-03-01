@@ -11,6 +11,7 @@ import {
   logoutUser,
   userSignUp,
   updateUserProfile,
+  toggleUserRole,
 } from "../controller/userController.js";
 
 router.post("/login", userLogin);
@@ -27,6 +28,13 @@ router.get(
   protectedRoutesWithParser,
   adminMiddleware,
   logoutUser
+);
+
+router.patch(
+  "toggleRole/:userId",
+  protectedRoutesWithParser,
+  adminMiddleware,
+  toggleUserRole
 );
 
 export default router;

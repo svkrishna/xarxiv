@@ -113,7 +113,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 // @desc update user profile
 // route PUT /api/users/getAllUsers
-// @ccess PRIVATE ( only or admin )
+// @ccess PRIVATE (for admin)
 const getAllUsersList = asyncHandler(async (req, res) => {
   try {
     // Fetch all users excluding passwords
@@ -127,6 +127,36 @@ const getAllUsersList = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Toggle user role between "admin" and "reader"
+// @route PATCH /api/users/toggleRole/:userId
+// @access PRIVATE (for admin)
+const toggleUserRole = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await UserModal.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Toggle
+    user.role = user.role === "admin" ? "reader" : "admin";
+    await user.save();
+
+    res.status(200).json({
+      message: "User role updated successfully.",
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error while toggling user role." });
+  }
+});
+
 export {
   userLogin,
   userSignUp,
@@ -134,4 +164,5 @@ export {
   getUserProfile,
   updateUserProfile,
   getAllUsersList,
+  toggleUserRole,
 };
