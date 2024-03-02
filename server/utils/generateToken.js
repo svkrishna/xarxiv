@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
+
 const generateToken = (res, userId, expiresIn = "2d") => {
   const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: expiresIn,

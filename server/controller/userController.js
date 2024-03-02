@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 //modals
 import UserModal from "../modals/userModal.js";
 //helpers
-import generateToken from "../utils/generateToken.js";
+import { generateToken } from "../utils/generateToken.js";
 import matchPassword from "../utils/matchPassword.js";
 
 // @desc authenticated users/ token

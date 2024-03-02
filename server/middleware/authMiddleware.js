@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 
 //modals
-import UserModal from "../modals/userModal";
+import UserModal from "../modals/userModal.js";
 
 const protectedRoutesWithParser = asyncHandler(async (req, res, next) => {
   const token = req.cookies.jwt;

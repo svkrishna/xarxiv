@@ -7,6 +7,7 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDb from "./config/db.js";
 //routes
 import userRoutes from "./routes/userRoutes.js";
+import paperSubmissionRoutes from "./routes/paperSubmissionRoutes.js";
 
 const port = process.env.PORT || 5000;
 connectDb();
@@ -32,6 +33,8 @@ app.get("/", (req, res) => {
 
 //users
 app.use("/api/users", userRoutes);
+//papers submission
+app.use("/api/papers", paperSubmissionRoutes);
 
 //ERROR HANDLER
 app.use(notFound);
