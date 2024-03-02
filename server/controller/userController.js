@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import asyncHandler from "express-async-handler";
 //modals
 import UserModal from "../modals/userModal.js";
@@ -12,17 +13,26 @@ const userLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await UserModal.findOne({ email });
 
-  if (user && matchPassword(password, user.password)) {
-    generateToken(res, user._id);
-    res.status(200).json({
-      data: {
-        _id: user._id,
-        name: user.username,
-        email: user.email,
-        role: user.role,
-      },
-      message: "Login successful",
-    });
+  console.log({
+    body: req.body,
+  });
+
+  if (user) {
+    const isMatch = await matchPassword(password, user.password);
+    if (isMatch) {
+      generateToken(res, user._id);
+      res.status(200).json({
+        data: {
+          _id: user._id,
+          name: user.username,
+          email: user.email,
+          role: user.role,
+        },
+        message: "Login successful",
+      });
+    } else {
+      res.status(401).json({ message: "Invalid email or password" });
+    }
   } else {
     res.status(401).json({ message: "Invalid email or password" });
   }
@@ -31,6 +41,7 @@ const userLogin = asyncHandler(async (req, res) => {
 // @desc register a new user
 // route POST /api/users/signup
 // @ccess PUBLIC
+
 const userSignUp = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -42,10 +53,14 @@ const userSignUp = asyncHandler(async (req, res) => {
     return;
   }
 
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   const newUser = new UserModal({
     username,
     email,
-    password,
+    password: hashedPassword, // Save the hashed password
   });
 
   await newUser.save();
