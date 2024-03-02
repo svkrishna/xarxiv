@@ -12,6 +12,7 @@ import {
   userSignUp,
   updateUserProfile,
   toggleUserRole,
+  getAllUsersList,
 } from "../controller/userController.js";
 
 router.post("/login", userLogin);
@@ -27,7 +28,7 @@ router.get(
   "/getAllUsers",
   protectedRoutesWithParser,
   adminMiddleware,
-  logoutUser
+  getAllUsersList
 );
 
 router.patch(

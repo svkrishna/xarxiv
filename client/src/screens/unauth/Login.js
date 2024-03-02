@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useLoginMutation } from "../../slices/auth/authApiSlice";
+import { useDispatch } from "react-redux";
+
+import { setCredentials } from "../../slices/auth/authSlice";
 
 const Login = () => {
+  //misc
+  const dispatch = useDispatch();
+
   const [login, { isLoading: isLoadingLogin, isError: isErrorLogin }] =
     useLoginMutation();
   const [formData, setFormData] = useState({
@@ -15,11 +21,12 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevents the default form submit action
+    e.preventDefault();
 
     try {
       const { username, email, password } = formData;
       const payload = await login({ username, email, password }).unwrap();
+      dispatch(setCredentials(payload.data));
       console.log("Login successful", payload);
     } catch (err) {
       console.error("Failed to login", err);
