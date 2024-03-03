@@ -24,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.json("Hello");
