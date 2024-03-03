@@ -7,7 +7,7 @@ import PaperModal from "../modals/PaperModal.js";
 // @ccess PRIVATE
 const submitPaper = asyncHandler(async (req, res) => {
   try {
-    const { title, authors, abstract } = req.body;
+    const { title, authors, abstract, subjectArea } = req.body;
     const submittedBy = req.user._id;
 
     const paperFilePath = req.file.path;
@@ -16,6 +16,7 @@ const submitPaper = asyncHandler(async (req, res) => {
       title,
       authors,
       abstract,
+      subjectArea,
       paperFilePath,
       submittedBy,
     });
@@ -108,6 +109,7 @@ const updatePaper = asyncHandler(async (req, res) => {
     paper.title = title;
     paper.authors = authors;
     paper.abstract = abstract;
+    paper.subjectArea = subjectArea;
 
     if (req.file) {
       paper.paperFilePath = req.file.path;
@@ -236,6 +238,41 @@ const deleteCommentFromPaper = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Search for papers by title, authors, abstract, and subject area
+// @route GET /api/papers/searchPapers
+// @access PUBLIC
+
+const searchPapers = asyncHandler(async (req, res) => {
+  try {
+    const { searchTerm, date, subjectArea, authors } = req.query;
+    let query = {};
+    if (searchTerm) {
+      query.$or = [
+        { title: new RegExp(searchTerm, "i") },
+        { abstract: new RegExp(searchTerm, "i") },
+      ];
+    }
+
+    if (date) {
+      query.createdAt = { $gte: new Date(date) };
+    }
+
+    if (subjectArea) {
+      query.subjectArea = new RegExp(subjectArea, "i");
+    }
+
+    if (authors) {
+      query.authors = { $in: authors.split(",") };
+    }
+
+    const papers = await PaperModal.find(query).lean();
+
+    res.status(200).json(papers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export {
   submitPaper,
   getAllPapers,
@@ -245,4 +282,5 @@ export {
   addCommentToPaper,
   updateCommentOnPaper,
   deleteCommentFromPaper,
+  searchPapers,
 };

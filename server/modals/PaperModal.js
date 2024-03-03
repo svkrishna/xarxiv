@@ -37,6 +37,10 @@ const paperSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    subjectArea: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       enum: ["submitted", "under review", "accepted", "rejected", "withdrawn"],
