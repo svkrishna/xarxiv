@@ -155,10 +155,94 @@ const updatePaperStatus = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Add a comment to a paper
+// @route POST /api/papers/addComment/:id
+// @access PRIVATE
+const addCommentToPaper = asyncHandler(async (req, res) => {
+  const paperId = req.params.id;
+  const { text } = req.body;
+  const commentedBy = req.user._id;
+
+  const paper = await PaperModal.findById(paperId);
+
+  if (paper) {
+    const newComment = {
+      text,
+      commentedBy,
+    };
+
+    paper.comments.push(newComment);
+    await paper.save();
+
+    res.status(201).json({
+      message: "Comment added successfully",
+      comment: newComment,
+    });
+  } else {
+    res.status(404).json({ message: "Paper not found" });
+  }
+});
+
+// Update a comment on a paper
+// @route PUT /api/papers/updateComment/:paperId/:commentId
+// @access PRIVATE
+const updateCommentOnPaper = asyncHandler(async (req, res) => {
+  const { paperId, commentId } = req.params;
+  const { text } = req.body;
+
+  const paper = await PaperModal.findById(paperId);
+
+  if (paper) {
+    const comment = paper.comments.id(commentId);
+    if (comment) {
+      if (comment.commentedBy.toString() !== req.user._id.toString()) {
+        res.status(401).json({ message: "User not authorized" });
+        return;
+      }
+      comment.text = text;
+      await paper.save();
+      res.status(200).json({ message: "Comment updated successfully" });
+    } else {
+      res.status(404).json({ message: "Comment not found" });
+    }
+  } else {
+    res.status(404).json({ message: "Paper not found" });
+  }
+});
+
+// Delete a comment on a paper
+// @route DELETE /api/papers/deleteComment/:paperId/:commentId
+// @access PRIVATE
+const deleteCommentFromPaper = asyncHandler(async (req, res) => {
+  const { paperId, commentId } = req.params;
+
+  const paper = await PaperModal.findById(paperId);
+
+  if (paper) {
+    const comment = paper.comments.id(commentId);
+    if (comment) {
+      if (comment.commentedBy.toString() !== req.user._id.toString()) {
+        res.status(401).json({ message: "User not authorized" });
+        return;
+      }
+      comment.remove();
+      await paper.save();
+      res.status(200).json({ message: "Comment deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Comment not found" });
+    }
+  } else {
+    res.status(404).json({ message: "Paper not found" });
+  }
+});
+
 export {
   submitPaper,
   getAllPapers,
   getMyPapers,
   updatePaper,
   updatePaperStatus,
+  addCommentToPaper,
+  updateCommentOnPaper,
+  deleteCommentFromPaper,
 };
