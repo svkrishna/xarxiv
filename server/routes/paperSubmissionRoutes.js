@@ -5,7 +5,11 @@ import {
 } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-import { getMyPapers, submitPaper } from "../controller/paperController.js";
+import {
+  getAllPapers,
+  getMyPapers,
+  submitPaper,
+} from "../controller/paperController.js";
 import { uploadFile } from "../utils/fileUpload.js";
 
 router.post(
@@ -14,6 +18,7 @@ router.post(
   uploadFile.single("paperFile"),
   submitPaper
 );
+router.get("/getAllPapers", getAllPapers);
 router.get("/getMyPapers", protectedRoutesWithParser, getMyPapers);
 
 export default router;
