@@ -39,7 +39,7 @@ const paperSchema = new mongoose.Schema(
     },
     subjectArea: {
       type: String,
-      required: true,
+      // required: true,
     },
     status: {
       type: String,

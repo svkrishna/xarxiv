@@ -6,9 +6,12 @@ import {
 const router = express.Router();
 
 import {
+  addCommentToPaper,
+  deleteCommentFromPaper,
   getAllPapers,
   getMyPapers,
   submitPaper,
+  updateCommentOnPaper,
 } from "../controller/paperController.js";
 import { uploadFile } from "../utils/fileUpload.js";
 
@@ -20,5 +23,13 @@ router.post(
 );
 router.get("/getAllPapers", getAllPapers);
 router.get("/getMyPapers", protectedRoutesWithParser, getMyPapers);
+//comment
+router.post("/addComment/:id", protectedRoutesWithParser, addCommentToPaper);
+router.put("/updateComment", protectedRoutesWithParser, updateCommentOnPaper);
+router.delete(
+  "/deleteComment",
+  protectedRoutesWithParser,
+  deleteCommentFromPaper
+);
 
 export default router;

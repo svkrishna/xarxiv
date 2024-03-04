@@ -1,8 +1,37 @@
-import React from "react";
-import { useGetAllPapersQuery } from "../../slices/paper/paperApiSlice";
+import React, { useState } from "react";
+import {
+  useAddCommentToPaperMutation,
+  useGetAllPapersQuery,
+} from "../../slices/paper/paperApiSlice";
+import AddCommentComponent from "../../components/AddCommentComponent";
 
 const Home = () => {
+  //state
+  const [commentTexts, setCommentTexts] = useState({});
+
+  //queries n mutation
   const { data: papers, error, isLoading } = useGetAllPapersQuery();
+  const [addCommentToPaper] = useAddCommentToPaperMutation();
+
+  //func
+  const handleCommentChange = (paperId, text) => {
+    setCommentTexts({ [paperId]: text });
+  };
+
+  const handleAddComment = async (paperId) => {
+    if (commentTexts[paperId]) {
+      try {
+        const result = await addCommentToPaper({
+          id: paperId,
+          data: { text: commentTexts[paperId] },
+        }).unwrap();
+        console.log(result, "Comment added successfully");
+        handleCommentChange({});
+      } catch (error) {
+        console.error("Failed to add comment", error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -13,32 +42,55 @@ const Home = () => {
         <div>
           <h2>All Papers</h2>
           <ul>
-            {papers.data.map((paper, index) => (
-              <li key={paper._id || index}>
-                <h3>{paper.title}</h3>
-                <p>Abstract: {paper.abstract}</p>
-                <p>Authors: {paper.authors.join(", ")}</p>
-                <p>Status: {paper.status}</p>
-                {/* <iframe
-                  src={paper.paperFilePath}
+            {papers.data.map((paper, index) => {
+              const {
+                _id: paperId,
+                title,
+                abstract,
+                authors,
+                status,
+                paperFilePath,
+                submittedBy,
+                createdAt,
+                comments,
+              } = paper;
+              return (
+                <li
+                  key={paperId}
+                  style={{
+                    border: "1px solid red",
+                  }}
+                >
+                  <h3>{title}</h3>
+                  <p>Abstract: {abstract}</p>
+                  <p>Authors: {authors.join(", ")}</p>
+                  <p>Status: {status}</p>
+                  {/* <iframe
+                  src={paperFilePath}
                   width="100%"
                   height="600px"
                   title="Paper Preview"
                 /> */}
-                <a
-                  href={paper.paperFilePath}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Download Paper
-                </a>
-                <p>Submitted By: {paper.submittedBy?.username}</p>
-                <p>
-                  Date Submitted:{" "}
-                  {new Date(paper.createdAt).toLocaleDateString()}
-                </p>
-              </li>
-            ))}
+                  <a
+                    href={paperFilePath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Download Paper
+                  </a>
+                  <p>Submitted By: {submittedBy?.username}</p>
+                  <p>
+                    Date Submitted: {new Date(createdAt).toLocaleDateString()}
+                  </p>
+                  <AddCommentComponent
+                    commentTexts={commentTexts}
+                    paperId={paperId}
+                    handleAddComment={handleAddComment}
+                    handleCommentChange={handleCommentChange}
+                  />
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
