@@ -46,6 +46,10 @@ const submitPaper = asyncHandler(async (req, res) => {
 const getAllPapers = asyncHandler(async (req, res) => {
   try {
     const papers = await PaperModal.find({})
+      .populate({
+        path: "comments.commentedBy",
+        select: "username",
+      })
       .populate("submittedBy", "username email")
       .lean();
 

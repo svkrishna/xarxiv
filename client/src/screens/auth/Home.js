@@ -4,6 +4,7 @@ import {
   useGetAllPapersQuery,
 } from "../../slices/paper/paperApiSlice";
 import AddCommentComponent from "../../components/AddCommentComponent";
+import CommentList from "../../components/CommentList";
 
 const Home = () => {
   //state
@@ -88,6 +89,8 @@ const Home = () => {
                     handleAddComment={handleAddComment}
                     handleCommentChange={handleCommentChange}
                   />
+
+                  <CommentList comments={comments} />
                 </li>
               );
             })}

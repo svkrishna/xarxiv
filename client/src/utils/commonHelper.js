@@ -14,4 +14,9 @@ const useNavigationHelper = () => {
   return navigateTo;
 };
 
-export { useNavigationHelper };
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleString();
+};
+
+export { useNavigationHelper, formatDate };
