@@ -198,6 +198,11 @@ const updateCommentOnPaper = asyncHandler(async (req, res) => {
   const { paperId, commentId } = req.params;
   const { text } = req.body;
 
+  // console.log({
+  //   params: req.params,
+  //   body: req.body,
+  // });
+
   const paper = await PaperModal.findById(paperId);
 
   if (paper) {

@@ -31,7 +31,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     updateComment: builder.mutation({
       query: ({ paperId, commentId, data }) => ({
         url: `${USERS_URL}/updateComment/${paperId}/${commentId}`,
-        method: "POST",
+        method: "PUT",
         body: data,
       }),
     }),
