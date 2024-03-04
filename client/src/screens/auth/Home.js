@@ -19,6 +19,12 @@ const Home = () => {
                 <p>Abstract: {paper.abstract}</p>
                 <p>Authors: {paper.authors.join(", ")}</p>
                 <p>Status: {paper.status}</p>
+                {/* <iframe
+                  src={paper.paperFilePath}
+                  width="100%"
+                  height="600px"
+                  title="Paper Preview"
+                /> */}
                 <a
                   href={paper.paperFilePath}
                   target="_blank"
