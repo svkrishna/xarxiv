@@ -2,8 +2,29 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { formatDate } from "../utils/commonHelper";
 
-const CommentList = ({ comments }) => {
+const CommentList = ({
+  comments,
+  paperId,
+  handleEditComment,
+  handleUpdateComment,
+  editCommentId,
+  editCommentText,
+  handleEditCommentChange,
+}) => {
   const { userInfo } = useSelector((state) => state.authReducer);
+
+  //
+
+  // This function is triggered when the UPDATE button is clicked
+  const onEditClick = (comment) => {
+    handleEditCommentChange(comment.text); // Set the text to the input field
+    handleEditComment(comment._id); // Set the comment as being edited
+  };
+
+  // This function is triggered when the SAVE button is clicked
+  const onSaveClick = (paperId, commentId) => {
+    handleUpdateComment(paperId, commentId, editCommentText);
+  };
 
   return (
     <div>
@@ -21,9 +42,16 @@ const CommentList = ({ comments }) => {
                   margin: "10px 0",
                 }}
               >
-                <p>
-                  <strong>Comment: </strong> {text}
-                </p>
+                {editCommentId && editCommentId === _id ? (
+                  <input
+                    value={editCommentText}
+                    onChange={handleEditCommentChange}
+                  />
+                ) : (
+                  <p>
+                    <strong>Comment: </strong> {text}
+                  </p>
+                )}
                 <div
                   style={{
                     display: "flex",
@@ -48,11 +76,20 @@ const CommentList = ({ comments }) => {
                       <strong>Updated:</strong> {formatDate(updatedAt)}
                     </span>
                   )}
+
                   {userInfo?._id === commentedBy?._id && (
-                    <button>UPDATE</button>
-                  )}
-                  {userInfo?._id === commentedBy?._id && (
-                    <button>DELETE</button>
+                    <>
+                      {editCommentId === _id ? (
+                        <button onClick={() => onSaveClick(paperId, _id)}>
+                          SAVE
+                        </button>
+                      ) : (
+                        <button onClick={() => onEditClick(comment)}>
+                          UPDATE
+                        </button>
+                      )}
+                      <button>DELETE</button>
+                    </>
                   )}
                 </div>
               </li>

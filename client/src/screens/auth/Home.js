@@ -45,11 +45,16 @@ const Home = () => {
   const handleUpdateComment = async (paperId) => {
     if (editCommentId && editCommentText) {
       try {
-        const result = await updateComment({
+        // const result = await updateComment({
+        //   paperId,
+        //   commentId: editCommentId,
+        //   data: { text: editCommentText },
+        // }).unwrap();
+        const result = {
           paperId,
           commentId: editCommentId,
           data: { text: editCommentText },
-        }).unwrap();
+        };
         console.log(result, "Comment updated successfully");
         // Reset editing state
         setEditCommentId(null);
@@ -126,11 +131,12 @@ const Home = () => {
 
                   <CommentList
                     comments={comments}
-                    onEditComment={handleEditComment}
-                    onUpdateComment={handleUpdateComment}
-                    isEditing={editCommentId}
+                    paperId={paperId}
+                    handleEditComment={handleEditComment}
+                    handleUpdateComment={handleUpdateComment}
+                    editCommentId={editCommentId}
                     editCommentText={editCommentText}
-                    onEditCommentChange={handleEditCommentChange}
+                    handleEditCommentChange={handleEditCommentChange}
                   />
                 </li>
               );
