@@ -16,8 +16,9 @@ const CommentList = ({
   //
 
   const onEditClick = (comment) => {
+    console.log(comment, " ccc");
     handleEditCommentChange(comment.text);
-    handleEditComment(comment._id);
+    handleEditComment(comment._id, comment.text);
   };
 
   const onSaveClick = (paperId, commentId) => {
@@ -43,7 +44,7 @@ const CommentList = ({
                 {editCommentId && editCommentId === _id ? (
                   <input
                     value={editCommentText}
-                    onChange={handleEditCommentChange}
+                    onChange={(e) => handleEditCommentChange(e.target.value)}
                   />
                 ) : (
                   <p>

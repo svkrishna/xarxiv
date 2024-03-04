@@ -45,16 +45,16 @@ const Home = () => {
   const handleUpdateComment = async (paperId) => {
     if (editCommentId && editCommentText) {
       try {
-        // const result = await updateComment({
-        //   paperId,
-        //   commentId: editCommentId,
-        //   data: { text: editCommentText },
-        // }).unwrap();
-        const result = {
+        const result = await updateComment({
           paperId,
           commentId: editCommentId,
           data: { text: editCommentText },
-        };
+        }).unwrap();
+        // const result = {
+        //   paperId,
+        //   commentId: editCommentId,
+        //   data: { text: editCommentText },
+        // };
         console.log(result, "Comment updated successfully");
         // Reset editing state
         setEditCommentId(null);
@@ -77,7 +77,16 @@ const Home = () => {
       {error && <div>Error fetching papers.</div>}
       {papers && (
         <div>
-          <h2>All Papers</h2>
+          <h2
+            onClick={() =>
+              console.log({
+                editCommentId,
+                editCommentText,
+              })
+            }
+          >
+            All Papers
+          </h2>
           <ul>
             {papers.data.map((paper, index) => {
               const {
