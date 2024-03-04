@@ -42,6 +42,11 @@ const Header = () => {
       <button onClick={() => navigateTo("addPaper")} disabled={isLoading}>
         Add Paper
       </button>
+      {userInfo?.role === "admin" && (
+        <button onClick={() => navigateTo("allUsers")} disabled={isLoading}>
+          All Users
+        </button>
+      )}
       <button onClick={handleLogout} disabled={isLoading}>
         Logout
       </button>

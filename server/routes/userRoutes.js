@@ -32,7 +32,7 @@ router.get(
 );
 
 router.patch(
-  "toggleRole/:userId",
+  "/toggleRole/:userId",
   protectedRoutesWithParser,
   adminMiddleware,
   toggleUserRole

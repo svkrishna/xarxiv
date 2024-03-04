@@ -148,6 +148,10 @@ const getAllUsersList = asyncHandler(async (req, res) => {
 const toggleUserRole = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
+  console.log({
+    params: req.params,
+  });
+
   try {
     const user = await UserModal.findById(userId);
     if (!user) {
