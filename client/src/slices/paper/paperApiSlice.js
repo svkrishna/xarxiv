@@ -46,6 +46,20 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    updatePaperStatus: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${USERS_URL}/updatePaperStatus/${id}`,
+        method: "PATCH",
+        body,
+      }),
+    }),
+    updatePaperStatusAdmin: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `${USERS_URL}/updatePaperStatusAdmin/${id}`,
+        method: "PATCH",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -58,4 +72,7 @@ export const {
   useAddCommentToPaperMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  //status
+  useUpdatePaperStatusMutation,
+  useUpdatePaperStatusAdminMutation,
 } = userApiSlice;

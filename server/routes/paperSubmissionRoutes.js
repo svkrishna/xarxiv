@@ -13,6 +13,7 @@ import {
   getPaperDetailsById,
   submitPaper,
   updateCommentOnPaper,
+  updatePaperStatus,
 } from "../controller/paperController.js";
 import { uploadFile } from "../utils/fileUpload.js";
 
@@ -29,6 +30,20 @@ router.get(
   protectedRoutesWithParser,
   getPaperDetailsById
 );
+
+router.patch(
+  "/updatePaperStatus/:id",
+  protectedRoutesWithParser,
+  updatePaperStatus
+);
+
+router.patch(
+  "/updatePaperStatusAdmin/:id",
+  protectedRoutesWithParser,
+  adminMiddleware,
+  updatePaperStatus
+);
+
 //comment
 router.post("/addComment/:id", protectedRoutesWithParser, addCommentToPaper);
 router.put(
