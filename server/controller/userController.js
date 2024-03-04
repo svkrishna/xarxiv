@@ -24,7 +24,7 @@ const userLogin = asyncHandler(async (req, res) => {
       res.status(200).json({
         data: {
           _id: user._id,
-          name: user.username,
+          username: user.username,
           email: user.email,
           role: user.role,
         },
