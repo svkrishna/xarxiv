@@ -15,13 +15,11 @@ const CommentList = ({
 
   //
 
-  // This function is triggered when the UPDATE button is clicked
   const onEditClick = (comment) => {
-    handleEditCommentChange(comment.text); // Set the text to the input field
-    handleEditComment(comment._id); // Set the comment as being edited
+    handleEditCommentChange(comment.text);
+    handleEditComment(comment._id);
   };
 
-  // This function is triggered when the SAVE button is clicked
   const onSaveClick = (paperId, commentId) => {
     handleUpdateComment(paperId, commentId, editCommentText);
   };

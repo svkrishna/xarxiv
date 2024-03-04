@@ -65,7 +65,6 @@ const Home = () => {
     }
   };
 
-  // Function to trigger edit mode
   const handleEditComment = (commentId, text) => {
     setEditCommentId(commentId);
     setEditCommentText(text);
