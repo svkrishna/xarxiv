@@ -108,14 +108,29 @@ const getMyPapers = asyncHandler(async (req, res) => {
 // @route GET /api/papers/getPaperDetailsById/:id
 // @access PRIVATE
 const getPaperDetailsById = asyncHandler(async (req, res) => {
-  const paper = await PaperModal.findById(req.params.id)
-    .populate("submittedBy", "username email")
-    .populate("comments.commentedBy", "username");
+  try {
+    const paper = await PaperModal.findById(req.params.id)
+      .populate("submittedBy", "username email")
+      .populate("comments.commentedBy", "username")
+      .lean();
 
-  if (paper) {
-    res.json(paper);
-  } else {
-    res.status(404).json({ message: "Paper not found" });
+    if (paper) {
+      let filePath = paper.paperFilePath.replace(/\\/g, "/");
+      filePath = filePath.startsWith("uploads/")
+        ? filePath
+        : `uploads/${filePath}`;
+      paper.paperFilePath = `${req.protocol}://${req.get("host")}/${filePath}`;
+
+      res.status(200).json({
+        message: "Paper details fetched successfully.",
+        paper,
+      });
+    } else {
+      res.status(404).json({ message: "Paper not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 });
 

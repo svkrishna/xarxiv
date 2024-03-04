@@ -7,8 +7,11 @@ import {
 } from "../../slices/paper/paperApiSlice";
 import AddCommentComponent from "../../components/AddCommentComponent";
 import CommentList from "../../components/CommentList";
+import { useNavigationHelper } from "../../utils/commonHelper";
 
 const Home = () => {
+  //misc
+  const navigateTo = useNavigationHelper();
   //state
   const [commentTexts, setCommentTexts] = useState({});
   const [editCommentId, setEditCommentId] = useState(null);
@@ -145,6 +148,17 @@ const Home = () => {
                   <p>
                     Date Submitted: {new Date(createdAt).toLocaleDateString()}
                   </p>
+
+                  <button
+                    // onClick={() => console.log({ paperId }, " paper from li")}
+                    onClick={() => navigateTo(`paperDetails/${paperId}`)}
+                    style={{
+                      margin: "10px 0",
+                    }}
+                  >
+                    View
+                  </button>
+
                   <AddCommentComponent
                     commentTexts={commentTexts}
                     paperId={paperId}

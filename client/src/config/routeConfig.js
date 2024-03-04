@@ -16,6 +16,7 @@ import HomeScreen from "../screens/auth/Home";
 import AddPaperScreen from "../screens/auth/AddPaper";
 import MyPapersScreen from "../screens/auth/MyPapers";
 import AllUsersListScreen from "../screens/auth/AllUsersList";
+import PaperDetailsScreen from "../screens/auth/PaperDetails";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,7 @@ export const router = createBrowserRouter(
         <Route path="/addPaper" element={<AddPaperScreen />} />
         <Route path="/myPapers" element={<MyPapersScreen />} />
         <Route path="/allUsers" element={<AllUsersListScreen />} />
+        <Route path="/paperDetails/:paperId" element={<PaperDetailsScreen />} />
       </Route>
       <Route path="*" element={<h1>404 Component</h1>} />
     </Route>
