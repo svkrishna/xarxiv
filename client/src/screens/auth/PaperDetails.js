@@ -8,6 +8,7 @@ import {
 
 const PaperDetails = () => {
   //misc
+  const selectableStatuses = ["under review", "accepted", "rejected"];
   const { paperId } = useParams();
   const { userInfo } = useSelector((state) => state.authReducer);
   const [updatePaperStatus, { isLoading: isUpdating, error: updateError }] =
@@ -18,6 +19,7 @@ const PaperDetails = () => {
     data: paperDetails,
     error,
     isLoading,
+    refetch: refetchPaperDetails,
   } = useGetPaperDetailsByIdQuery(paperId);
 
   //func
@@ -27,7 +29,21 @@ const PaperDetails = () => {
         id: paperId,
         body: { status: "withdrawn" },
       }).unwrap();
+      refetchPaperDetails();
       console.log(result, "Paper status updated to withdrawn.");
+    } catch (err) {
+      console.error("Failed to update paper status:", err);
+    }
+  };
+
+  const handleStatus = async (status) => {
+    try {
+      const result = await updatePaperStatus({
+        id: paperId,
+        body: { status },
+      }).unwrap();
+      refetchPaperDetails();
+      console.log(result, `Paper status updated to ${status}.`);
     } catch (err) {
       console.error("Failed to update paper status:", err);
     }
@@ -42,8 +58,23 @@ const PaperDetails = () => {
       {error && <p>An error occurred: {error.toString()}</p>}
       {paperDetails && paperDetails?.paper && (
         <div>
-          {userInfo?._id === paperDetails?.paper?.submittedBy._id && (
-            <button onClick={() => handleWithdraw()}>withdrawn</button>
+          {userInfo?._id === paperDetails?.paper?.submittedBy._id &&
+            paperDetails?.paper?.status !== "withdrawn" && (
+              <button onClick={() => handleWithdraw()}>withdrawn</button>
+            )}
+
+          {userInfo?.role === "admin" && (
+            <select
+              value={paperDetails?.paper?.status}
+              onChange={(e) => handleStatus(e.target.value)}
+              disabled={isUpdating}
+            >
+              {selectableStatuses.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
           )}
 
           <h3>{paperDetails?.paper?.title}</h3>
