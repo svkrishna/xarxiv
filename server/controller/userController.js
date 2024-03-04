@@ -72,7 +72,7 @@ const userSignUp = asyncHandler(async (req, res) => {
 
   res.status(201).json({
     message: "User registered successfully.",
-    user: userForResponse,
+    data: userForResponse,
   });
 });
 

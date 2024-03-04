@@ -8,11 +8,12 @@ import {
 import App from "../App";
 import PrivateRoute from "../components/PrivateRoute";
 import PublicRoute from "../components/PublicRoute";
-//auth
-import HomeScreen from "../screens/auth/Home";
 //unauth
 import LoginScreen from "../screens/unauth/Login";
 import RegisterScreen from "../screens/unauth/Register";
+//auth
+import HomeScreen from "../screens/auth/Home";
+import AddPaperScreen from "../screens/auth/AddPaper";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ export const router = createBrowserRouter(
       {/* private routes */}
       <Route path="" element={<PrivateRoute />}>
         <Route index={true} path="/" element={<HomeScreen />} />
+        <Route path="/addPaper" element={<AddPaperScreen />} />
       </Route>
       <Route path="*" element={<h1>404 Component</h1>} />
     </Route>
