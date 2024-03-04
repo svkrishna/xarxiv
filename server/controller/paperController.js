@@ -233,16 +233,14 @@ const deleteCommentFromPaper = asyncHandler(async (req, res) => {
 
   if (paper) {
     const comment = paper.comments.id(commentId);
-    if (comment) {
-      if (comment.commentedBy.toString() !== req.user._id.toString()) {
-        res.status(401).json({ message: "User not authorized" });
-        return;
-      }
-      comment.remove();
+    if (comment && comment.commentedBy.toString() === req.user._id.toString()) {
+      paper.comments.pull({ _id: commentId });
       await paper.save();
       res.status(200).json({ message: "Comment deleted successfully" });
     } else {
-      res.status(404).json({ message: "Comment not found" });
+      res
+        .status(404)
+        .json({ message: "Comment not found or user not authorized" });
     }
   } else {
     res.status(404).json({ message: "Paper not found" });
@@ -252,7 +250,6 @@ const deleteCommentFromPaper = asyncHandler(async (req, res) => {
 // @desc Search for papers by title, authors, abstract, and subject area
 // @route GET /api/papers/searchPapers
 // @access PUBLIC
-
 const searchPapers = asyncHandler(async (req, res) => {
   try {
     const { searchTerm, date, subjectArea, authors } = req.query;

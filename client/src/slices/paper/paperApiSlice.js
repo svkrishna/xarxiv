@@ -35,6 +35,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    deleteComment: builder.mutation({
+      query: ({ paperId, commentId }) => ({
+        url: `${USERS_URL}/deleteComment/${paperId}/${commentId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -45,4 +51,5 @@ export const {
   //comment
   useAddCommentToPaperMutation,
   useUpdateCommentMutation,
+  useDeleteCommentMutation,
 } = userApiSlice;

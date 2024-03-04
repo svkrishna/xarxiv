@@ -10,6 +10,7 @@ const CommentList = ({
   editCommentId,
   editCommentText,
   handleEditCommentChange,
+  handleDeleteComment,
 }) => {
   const { userInfo } = useSelector((state) => state.authReducer);
 
@@ -87,7 +88,10 @@ const CommentList = ({
                           UPDATE
                         </button>
                       )}
-                      <button>DELETE</button>
+                      {/* <button onClick={() => console.log({ paperId, _id })}> */}
+                      <button onClick={() => handleDeleteComment(paperId, _id)}>
+                        DELETE
+                      </button>
                     </>
                   )}
                 </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   useAddCommentToPaperMutation,
+  useDeleteCommentMutation,
   useGetAllPapersQuery,
   useUpdateCommentMutation,
 } from "../../slices/paper/paperApiSlice";
@@ -14,9 +15,15 @@ const Home = () => {
   const [editCommentText, setEditCommentText] = useState("");
 
   //queries n mutation
-  const { data: papers, error, isLoading } = useGetAllPapersQuery();
+  const {
+    data: papers,
+    error,
+    isLoading,
+    refetch: refetchPapers,
+  } = useGetAllPapersQuery();
   const [addCommentToPaper] = useAddCommentToPaperMutation();
   const [updateComment] = useUpdateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
 
   //func
   const handleCommentChange = (paperId, text) => {
@@ -32,6 +39,7 @@ const Home = () => {
         }).unwrap();
         console.log(result, "Comment added successfully");
         handleCommentChange({});
+        refetchPapers();
       } catch (error) {
         console.error("Failed to add comment", error);
       }
@@ -50,15 +58,11 @@ const Home = () => {
           commentId: editCommentId,
           data: { text: editCommentText },
         }).unwrap();
-        // const result = {
-        //   paperId,
-        //   commentId: editCommentId,
-        //   data: { text: editCommentText },
-        // };
         console.log(result, "Comment updated successfully");
         // Reset editing state
         setEditCommentId(null);
         setEditCommentText("");
+        refetchPapers();
       } catch (error) {
         console.error("Failed to update comment", error);
       }
@@ -68,6 +72,19 @@ const Home = () => {
   const handleEditComment = (commentId, text) => {
     setEditCommentId(commentId);
     setEditCommentText(text);
+  };
+
+  const handleDeleteComment = async (paperId, commentId) => {
+    try {
+      const result = await deleteComment({
+        paperId,
+        commentId,
+      }).unwrap();
+      console.log(result, "Comment deleted successfully");
+      refetchPapers();
+    } catch (error) {
+      console.error("Failed to delete comment", error);
+    }
   };
 
   return (
@@ -145,6 +162,7 @@ const Home = () => {
                     editCommentId={editCommentId}
                     editCommentText={editCommentText}
                     handleEditCommentChange={handleEditCommentChange}
+                    handleDeleteComment={handleDeleteComment}
                   />
                 </li>
               );

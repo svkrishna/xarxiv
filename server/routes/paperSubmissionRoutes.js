@@ -31,7 +31,7 @@ router.put(
   updateCommentOnPaper
 );
 router.delete(
-  "/deleteComment",
+  "/deleteComment/:paperId/:commentId",
   protectedRoutesWithParser,
   deleteCommentFromPaper
 );
