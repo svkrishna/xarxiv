@@ -14,6 +14,7 @@ import RegisterScreen from "../screens/unauth/Register";
 //auth
 import HomeScreen from "../screens/auth/Home";
 import AddPaperScreen from "../screens/auth/AddPaper";
+import MyPapersScreen from "../screens/auth/MyPapers";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ export const router = createBrowserRouter(
       <Route path="" element={<PrivateRoute />}>
         <Route index={true} path="/" element={<HomeScreen />} />
         <Route path="/addPaper" element={<AddPaperScreen />} />
+        <Route path="/myPapers" element={<MyPapersScreen />} />
       </Route>
       <Route path="*" element={<h1>404 Component</h1>} />
     </Route>

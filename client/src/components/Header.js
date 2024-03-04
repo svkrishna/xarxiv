@@ -36,6 +36,9 @@ const Header = () => {
       <strong onClick={() => navigateTo("/")}>
         {userInfo ? userInfo?.username : ""}
       </strong>
+      <button onClick={() => navigateTo("myPapers")} disabled={isLoading}>
+        My Papers
+      </button>
       <button onClick={() => navigateTo("addPaper")} disabled={isLoading}>
         Add Paper
       </button>
