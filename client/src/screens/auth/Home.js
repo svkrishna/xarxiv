@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   useAddCommentToPaperMutation,
   useGetAllPapersQuery,
+  useUpdateCommentMutation,
 } from "../../slices/paper/paperApiSlice";
 import AddCommentComponent from "../../components/AddCommentComponent";
 import CommentList from "../../components/CommentList";
@@ -9,10 +10,13 @@ import CommentList from "../../components/CommentList";
 const Home = () => {
   //state
   const [commentTexts, setCommentTexts] = useState({});
+  const [editCommentId, setEditCommentId] = useState(null);
+  const [editCommentText, setEditCommentText] = useState("");
 
   //queries n mutation
   const { data: papers, error, isLoading } = useGetAllPapersQuery();
   const [addCommentToPaper] = useAddCommentToPaperMutation();
+  const [updateComment] = useUpdateCommentMutation();
 
   //func
   const handleCommentChange = (paperId, text) => {
@@ -32,6 +36,34 @@ const Home = () => {
         console.error("Failed to add comment", error);
       }
     }
+  };
+
+  const handleEditCommentChange = (text) => {
+    setEditCommentText(text);
+  };
+
+  const handleUpdateComment = async (paperId) => {
+    if (editCommentId && editCommentText) {
+      try {
+        const result = await updateComment({
+          paperId,
+          commentId: editCommentId,
+          data: { text: editCommentText },
+        }).unwrap();
+        console.log(result, "Comment updated successfully");
+        // Reset editing state
+        setEditCommentId(null);
+        setEditCommentText("");
+      } catch (error) {
+        console.error("Failed to update comment", error);
+      }
+    }
+  };
+
+  // Function to trigger edit mode
+  const handleEditComment = (commentId, text) => {
+    setEditCommentId(commentId);
+    setEditCommentText(text);
   };
 
   return (
@@ -90,7 +122,16 @@ const Home = () => {
                     handleCommentChange={handleCommentChange}
                   />
 
-                  <CommentList comments={comments} />
+                  {/* <CommentList comments={comments} /> */}
+
+                  <CommentList
+                    comments={comments}
+                    onEditComment={handleEditComment}
+                    onUpdateComment={handleUpdateComment}
+                    isEditing={editCommentId}
+                    editCommentText={editCommentText}
+                    onEditCommentChange={handleEditCommentChange}
+                  />
                 </li>
               );
             })}

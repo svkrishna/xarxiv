@@ -28,6 +28,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateComment: builder.mutation({
+      query: ({ paperId, commentId, data }) => ({
+        url: `${USERS_URL}/updateComment/${paperId}/${commentId}`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -37,4 +44,5 @@ export const {
   useGetAllPapersQuery,
   //comment
   useAddCommentToPaperMutation,
+  useUpdateCommentMutation,
 } = userApiSlice;

@@ -25,7 +25,11 @@ router.get("/getAllPapers", getAllPapers);
 router.get("/getMyPapers", protectedRoutesWithParser, getMyPapers);
 //comment
 router.post("/addComment/:id", protectedRoutesWithParser, addCommentToPaper);
-router.put("/updateComment", protectedRoutesWithParser, updateCommentOnPaper);
+router.put(
+  "/updateComment/:paperId/:commentId",
+  protectedRoutesWithParser,
+  updateCommentOnPaper
+);
 router.delete(
   "/deleteComment",
   protectedRoutesWithParser,

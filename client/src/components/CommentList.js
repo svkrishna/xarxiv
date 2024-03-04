@@ -14,7 +14,12 @@ const CommentList = ({ comments }) => {
             return (
               <li
                 key={_id}
-                style={{ marginBottom: "1em", listStyleType: "none" }}
+                style={{
+                  marginBottom: "1em",
+                  listStyleType: "none",
+                  border: "1px solid green",
+                  margin: "10px 0",
+                }}
               >
                 <p>
                   <strong>Comment: </strong> {text}
@@ -42,6 +47,12 @@ const CommentList = ({ comments }) => {
                     <span>
                       <strong>Updated:</strong> {formatDate(updatedAt)}
                     </span>
+                  )}
+                  {userInfo?._id === commentedBy?._id && (
+                    <button>UPDATE</button>
+                  )}
+                  {userInfo?._id === commentedBy?._id && (
+                    <button>DELETE</button>
                   )}
                 </div>
               </li>
