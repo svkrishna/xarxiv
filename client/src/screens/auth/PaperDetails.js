@@ -42,7 +42,10 @@ const PaperDetails = () => {
       {error && <p>An error occurred: {error.toString()}</p>}
       {paperDetails && paperDetails?.paper && (
         <div>
-          <button onClick={() => handleWithdraw()}>withdrawn</button>
+          {userInfo?._id === paperDetails?.paper?.submittedBy._id && (
+            <button onClick={() => handleWithdraw()}>withdrawn</button>
+          )}
+
           <h3>{paperDetails?.paper?.title}</h3>
           <p>Abstract: {paperDetails?.paper?.abstract}</p>
           <p>Authors: {paperDetails?.paper?.authors.join(", ")}</p>
