@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { formatDate } from "../utils/commonHelper";
 
 const CommentList = ({ comments }) => {
-  //misc
   const { userInfo } = useSelector((state) => state.authReducer);
 
   return (
@@ -13,24 +12,38 @@ const CommentList = ({ comments }) => {
           {comments?.map((comment) => {
             const { _id, text, commentedBy, createdAt, updatedAt } = comment;
             return (
-              <li key={_id}>
+              <li
+                key={_id}
+                style={{ marginBottom: "1em", listStyleType: "none" }}
+              >
                 <p>
                   <strong>Comment: </strong> {text}
                 </p>
-                <p>
-                  <strong>Commented By:</strong>{" "}
-                  {userInfo?._id === commentedBy?._id
-                    ? "You"
-                    : commentedBy?.username}
-                </p>
-                <p>
-                  <strong>Commented On:</strong> {formatDate(createdAt)}
-                </p>
-                {updatedAt && (
-                  <p>
-                    <strong>Last Updated:</strong> {formatDate(updatedAt)}
-                  </p>
-                )}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "1em",
+                    marginBottom: "0.5em",
+                  }}
+                >
+                  <span>
+                    <strong>By:</strong>{" "}
+                    {userInfo?._id === commentedBy?._id
+                      ? "You"
+                      : commentedBy?.username}
+                  </span>
+                  <span>
+                    <strong>On:</strong> {formatDate(createdAt)}
+                  </span>
+                  {updatedAt && (
+                    <span>
+                      <strong>Updated:</strong> {formatDate(updatedAt)}
+                    </span>
+                  )}
+                </div>
               </li>
             );
           })}
