@@ -10,6 +10,7 @@ import {
   deleteCommentFromPaper,
   getAllPapers,
   getMyPapers,
+  getPaperDetailsById,
   submitPaper,
   updateCommentOnPaper,
 } from "../controller/paperController.js";
@@ -23,6 +24,11 @@ router.post(
 );
 router.get("/getAllPapers", getAllPapers);
 router.get("/getMyPapers", protectedRoutesWithParser, getMyPapers);
+router.get(
+  "/getPaperDetailsById/:id",
+  protectedRoutesWithParser,
+  getPaperDetailsById
+);
 //comment
 router.post("/addComment/:id", protectedRoutesWithParser, addCommentToPaper);
 router.put(

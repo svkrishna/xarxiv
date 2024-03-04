@@ -21,6 +21,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/getAllPapers`,
       }),
     }),
+    getPaperDetailsById: builder.query({
+      query: (paperId) => ({
+        url: `${USERS_URL}/getPaperDetailsById/${paperId}`,
+      }),
+    }),
     addCommentToPaper: builder.mutation({
       query: ({ id, data }) => ({
         url: `${USERS_URL}/addComment/${id}`,
@@ -48,6 +53,7 @@ export const {
   useSubmitPaperMutation,
   useGetMyPapersQuery,
   useGetAllPapersQuery,
+  useGetPaperDetailsByIdQuery,
   //comment
   useAddCommentToPaperMutation,
   useUpdateCommentMutation,

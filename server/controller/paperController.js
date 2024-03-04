@@ -104,6 +104,21 @@ const getMyPapers = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get paper details by ID
+// @route GET /api/papers/getPaperDetailsById/:id
+// @access PRIVATE
+const getPaperDetailsById = asyncHandler(async (req, res) => {
+  const paper = await PaperModal.findById(req.params.id)
+    .populate("submittedBy", "username email")
+    .populate("comments.commentedBy", "username");
+
+  if (paper) {
+    res.json(paper);
+  } else {
+    res.status(404).json({ message: "Paper not found" });
+  }
+});
+
 // @desc Update a paper submission
 // @route PUT /api/papers/updatePaper/:id
 // @access PRIVATE
@@ -285,6 +300,7 @@ export {
   submitPaper,
   getAllPapers,
   getMyPapers,
+  getPaperDetailsById,
   updatePaper,
   updatePaperStatus,
   addCommentToPaper,
