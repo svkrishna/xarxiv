@@ -45,7 +45,9 @@ const submitPaper = asyncHandler(async (req, res) => {
 // @access PUBLIC
 const getAllPapers = asyncHandler(async (req, res) => {
   try {
-    const papers = await PaperModal.find({}); // No filter, gets all papers
+    const papers = await PaperModal.find({})
+      .populate("submittedBy", "username email")
+      .lean();
 
     const papersWithFullPaths = papers.map((paper) => {
       let filePath = paper.paperFilePath.replace(/\\/g, "/");
@@ -54,7 +56,7 @@ const getAllPapers = asyncHandler(async (req, res) => {
         : `uploads/${filePath}`;
 
       return {
-        ...paper.toObject(),
+        ...paper,
         paperFilePath: `${req.protocol}://${req.get("host")}/${filePath}`,
       };
     });

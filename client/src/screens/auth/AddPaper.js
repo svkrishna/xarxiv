@@ -11,7 +11,7 @@ const Home = () => {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState("");
   const [abstract, setAbstract] = useState("");
-  const [subjectArea, setSubjectArea] = useState(""); // New state variable
+  const [subjectArea, setSubjectArea] = useState("");
 
   const [paperFile, setPaperFile] = useState(null);
 

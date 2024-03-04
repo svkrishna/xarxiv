@@ -16,7 +16,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/getMyPapers`,
       }),
     }),
+    getAllPapers: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/getAllPapers`,
+      }),
+    }),
   }),
 });
 
-export const { useSubmitPaperMutation, useGetMyPapersQuery } = userApiSlice;
+export const {
+  useSubmitPaperMutation,
+  useGetMyPapersQuery,
+  useGetAllPapersQuery,
+} = userApiSlice;
