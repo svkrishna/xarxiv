@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: xarxiv-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: xarxiv-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://admin:password123@mongodb:27017/xarxiv?authSource=admin
+      - JWT_SECRET=your_jwt_secret_key
+      - NODE_ENV=development
+    depends_on:
+      - mongodb
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: xarxiv-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - backend
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+
+volumes:
+  mongodb_data: 
